@@ -1,0 +1,23 @@
+<h2>Admin Dashboard</h2>
+
+<table border="1">
+  <tr>
+    <th>Title</th>
+    <th>User</th>
+    <th>Priority</th>
+    <th>Status</th>
+    <th>Action</th>
+  </tr>
+
+  {% for ticket in tickets %}
+  <tr>
+    <td>{{ ticket.title }}</td>
+    <td>{{ ticket.user }}</td>
+    <td>{{ ticket.priority }}</td>
+    <td>{{ ticket.status }}</td>
+    <td>
+      <a href="/update/{{ ticket.id }}/">Update</a>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
