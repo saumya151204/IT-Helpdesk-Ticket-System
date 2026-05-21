@@ -1,45 +1,381 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Register</title>
-
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register — Helpdesk</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
-    body {
-      background: #0f172a;
-      color: white;
-      font-family: 'Inter', sans-serif;
+    :root {
+      --bg-deep:    #0b1120;
+      --bg-card:    #111827;
+      --bg-input:   #1a2540;
+      --border:     #1e3a5f;
+      --border-focus: #38bdf8;
+      --cyan:       #38bdf8;
+      --text:       #e2e8f0;
+      --text-muted: #64748b;
+      --text-label: #94a3b8;
+      --error-bg:   rgba(239,68,68,0.1);
+      --error-border:#ef4444;
+      --error-text: #fca5a5;
     }
 
-    .form-box {
-      max-width: 400px;
-      margin: 100px auto;
-      background: rgba(255,255,255,0.05);
-      padding: 30px;
-      border-radius: 12px;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg-deep);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+      background-image:
+        radial-gradient(ellipse at 80% 50%, rgba(56,189,248,0.08) 0%, transparent 55%),
+        radial-gradient(ellipse at 20% 10%, rgba(56,189,248,0.05) 0%, transparent 45%);
     }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(56,189,248,0.06) 1px, transparent 1px);
+      background-size: 36px 36px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .auth-wrapper {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 420px;
+      animation: fadeUp 0.5s cubic-bezier(.22,1,.36,1) both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Brand ── */
+    .brand {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .brand-icon {
+      width: 52px; height: 52px;
+      background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+      border-radius: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.85rem;
+      box-shadow: 0 0 24px rgba(56,189,248,0.3);
+    }
+    .brand-icon svg { width: 26px; height: 26px; fill: #fff; }
+    .brand h1 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.65rem;
+      color: #fff;
+      letter-spacing: -0.5px;
+    }
+    .brand p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.3rem;
+    }
+
+    /* ── Card ── */
+    .auth-card {
+      background: var(--bg-card);
+      border-radius: 18px;
+      padding: 2rem 2rem;
+      border: 1px solid rgba(56,189,248,0.12);
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.04) inset,
+        0 24px 48px rgba(0,0,0,0.4);
+    }
+
+    .auth-card h2 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: #fff;
+      margin-bottom: 0.3rem;
+    }
+    .auth-card .subtitle {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+
+    /* ── Perks ── */
+    .perks {
+      background: rgba(56,189,248,0.05);
+      border: 1px solid rgba(56,189,248,0.12);
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .perk-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.81rem;
+      color: var(--text-label);
+      margin-bottom: 0.4rem;
+    }
+    .perk-item:last-child { margin-bottom: 0; }
+    .perk-dot {
+      width: 6px; height: 6px;
+      background: var(--cyan);
+      border-radius: 50%;
+      flex-shrink: 0;
+      box-shadow: 0 0 6px rgba(56,189,248,0.6);
+    }
+
+    /* ── Labels ── */
+    .form-label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text-label);
+      letter-spacing: 0.4px;
+      margin-bottom: 0.4rem;
+    }
+
+    /* ── Inputs ── */
+    .input-wrap {
+      position: relative;
+      margin-bottom: 1.1rem;
+    }
+    .input-icon {
+      position: absolute;
+      left: 0.85rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      display: flex;
+      pointer-events: none;
+    }
+    .input-wrap input {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 0.68rem 0.9rem 0.68rem 2.5rem;
+      font-size: 0.9rem;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+    .input-wrap input::placeholder { color: var(--text-muted); }
+    .input-wrap input:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px rgba(56,189,248,0.15);
+    }
+
+    /* ── Strength bar ── */
+    .strength-bar {
+      height: 3px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 99px;
+      margin-top: 0.45rem;
+      overflow: hidden;
+    }
+    .strength-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 99px;
+      transition: width 0.3s, background 0.3s;
+    }
+    .strength-label {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      margin-top: 0.3rem;
+    }
+
+    /* ── Submit ── */
+    .btn-submit {
+      width: 100%;
+      margin-top: 0.5rem;
+      padding: 0.75rem 1rem;
+      background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+      color: #fff;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.92rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      letter-spacing: 0.3px;
+      transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 16px rgba(56,189,248,0.25);
+    }
+    .btn-submit:hover {
+      opacity: 0.92;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px rgba(56,189,248,0.35);
+    }
+    .btn-submit:active { transform: translateY(0); }
+
+    /* ── Error ── */
+    .alert-error {
+      background: var(--error-bg);
+      border: 1px solid var(--error-border);
+      border-radius: 10px;
+      padding: 0.65rem 0.9rem;
+      font-size: 0.84rem;
+      color: var(--error-text);
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* ── Divider ── */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin: 1.5rem 0 1.25rem;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(255,255,255,0.07);
+    }
+
+    /* ── Footer ── */
+    .auth-footer {
+      text-align: center;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+    .auth-footer a {
+      color: var(--cyan);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .auth-footer a:hover { text-decoration: underline; }
   </style>
 </head>
-
 <body>
 
-<div class="form-box">
-  <h3 class="mb-4">Create Account</h3>
+<div class="auth-wrapper">
+
+  <div class="brand">
+    <div class="brand-icon">
+      <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 9h-2V5h2v6zm0 4h-2v-2h2v2z"/></svg>
+    </div>
+    <h1>Helpdesk Pro</h1>
+    <p>IT Support Ticket System</p>
+  </div>
+
+  <div class="auth-card">
+    <h2>Create your account</h2>
+    <p class="subtitle">Get started in seconds</p>
+
+    <div class="perks">
+      <div class="perk-item"><span class="perk-dot"></span> Submit & track IT support tickets</div>
+      <div class="perk-item"><span class="perk-dot"></span> Real-time status updates</div>
+      <div class="perk-item"><span class="perk-dot"></span> Comment & collaborate on issues</div>
+    </div>
 
     {% if error %}
-    <p style="color:red;">{{ error }}</p>
+    <div class="alert-error">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+      {{ error }}
+    </div>
     {% endif %}
-    
-  <form method="POST">
-    {% csrf_token %}
 
-    <input type="text" name="username" class="form-control mb-3" placeholder="Username" required>
-    <input type="password" name="password" class="form-control mb-3" placeholder="Password" required>
+    <form method="POST" action="/register/">
+      {% csrf_token %}
 
-    <button class="btn btn-primary w-100">Register</button>
-  </form>
+      <div>
+        <label class="form-label">Username</label>
+        <div class="input-wrap">
+          <span class="input-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+          </span>
+          <input type="text" name="username" placeholder="Choose a username" required autofocus>
+        </div>
+      </div>
+
+      <div>
+        <label class="form-label">Password</label>
+        <div class="input-wrap" style="margin-bottom:0.3rem;">
+          <span class="input-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18 8h-1V6c0-2.8-2.2-5-5-5S7 3.2 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.7 1.4-3.1 3.1-3.1 1.7 0 3.1 1.4 3.1 3.1v2z"/></svg>
+          </span>
+          <input type="password" name="password" id="passwordInput" placeholder="Create a password" required oninput="checkStrength(this.value)">
+        </div>
+        <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+        <div class="strength-label" id="strengthLabel">Enter a password</div>
+      </div>
+
+      <div style="margin-top:1rem;">
+        <label class="form-label">Confirm Password</label>
+        <div class="input-wrap" style="margin-bottom:0.3rem;">
+          <span class="input-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+          </span>
+          <input type="password" name="confirm_password" id="confirmInput" placeholder="Repeat your password" oninput="checkMatch()">
+        </div>
+        <div class="strength-label" id="matchLabel"></div>
+      </div>
+
+      <button type="submit" class="btn-submit">Create Account →</button>
+    </form>
+
+    <div class="divider">or</div>
+
+    <div class="auth-footer">
+      Already have an account? <a href="/login/">Sign in</a>
+    </div>
+  </div>
+
 </div>
 
+<script>
+  function checkStrength(val) {
+    const fill = document.getElementById('strengthFill');
+    const label = document.getElementById('strengthLabel');
+    if (!val) { fill.style.width='0%'; label.textContent='Enter a password'; label.style.color=''; return; }
+    let s = 0;
+    if (val.length >= 6)  s++;
+    if (val.length >= 10) s++;
+    if (/[A-Z]/.test(val)) s++;
+    if (/[0-9]/.test(val)) s++;
+    if (/[^A-Za-z0-9]/.test(val)) s++;
+    const lvls = [
+      {w:'20%', c:'#ef4444', t:'Weak'},
+      {w:'40%', c:'#f97316', t:'Fair'},
+      {w:'70%', c:'#eab308', t:'Good'},
+      {w:'100%',c:'#22c55e', t:'Strong '},
+    ];
+    const l = lvls[Math.min(Math.floor((s-1)*0.9), 3)];
+    fill.style.width = l.w;
+    fill.style.background = l.c;
+    label.textContent = l.t;
+    label.style.color = l.c;
+  }
+
+  function checkMatch() {
+    const p = document.getElementById('passwordInput').value;
+    const c = document.getElementById('confirmInput').value;
+    const lb = document.getElementById('matchLabel');
+    if (!c) { lb.textContent=''; return; }
+    if (p === c) { lb.textContent='✓ Passwords match'; lb.style.color='#22c55e'; }
+    else         { lb.textContent='✗ Does not match';  lb.style.color='#ef4444'; }
+  }
+</script>
 </body>
 </html>

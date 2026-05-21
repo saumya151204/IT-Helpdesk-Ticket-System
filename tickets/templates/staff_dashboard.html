@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard — Helpdesk</title>
+  <title>Staff Dashboard — Helpdesk</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -11,8 +11,6 @@
       --bg-card:   #111827;
       --bg-input:  #1a2540;
       --border:    #1e3a5f;
-      --gold:      #f59e0b;
-      --gold-dim:  #d97706;
       --cyan:      #38bdf8;
       --text:      #e2e8f0;
       --text-muted:#64748b;
@@ -27,12 +25,12 @@
       font-family: 'DM Sans', sans-serif;
       background: var(--bg); color: var(--text); min-height: 100vh;
       background-image:
-        radial-gradient(ellipse at 70% 10%, rgba(245,158,11,0.06) 0%, transparent 50%),
-        radial-gradient(ellipse at 10% 80%, rgba(56,189,248,0.05) 0%, transparent 50%);
+        radial-gradient(ellipse at 80% 20%, rgba(167,139,250,0.07) 0%, transparent 50%),
+        radial-gradient(ellipse at 10% 70%, rgba(56,189,248,0.05) 0%, transparent 50%);
     }
     body::before {
       content: ''; position: fixed; inset: 0;
-      background-image: radial-gradient(circle, rgba(245,158,11,0.03) 1px, transparent 1px);
+      background-image: radial-gradient(circle, rgba(167,139,250,0.04) 1px, transparent 1px);
       background-size: 36px 36px; pointer-events: none; z-index: 0;
     }
 
@@ -41,7 +39,7 @@
       position: relative; z-index: 10;
       display: flex; align-items: center; justify-content: space-between;
       padding: 1rem 2rem;
-      border-bottom: 1px solid rgba(245,158,11,0.12);
+      border-bottom: 1px solid rgba(167,139,250,0.12);
       background: rgba(11,17,32,0.85); backdrop-filter: blur(12px);
     }
     .nav-brand {
@@ -51,20 +49,21 @@
     }
     .nav-brand-icon {
       width: 32px; height: 32px;
-      background: linear-gradient(135deg, #d97706, #f59e0b);
+      background: linear-gradient(135deg, #7c3aed, #a78bfa);
       border-radius: 8px; display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 0 12px rgba(245,158,11,0.35);
+      box-shadow: 0 0 12px rgba(167,139,250,0.35);
     }
     .nav-brand-icon svg { width: 16px; height: 16px; fill: #fff; }
-    .admin-badge {
+    .staff-badge {
       font-size: 0.72rem; font-weight: 600; padding: 0.2rem 0.6rem;
-      border-radius: 20px; background: rgba(245,158,11,0.15);
-      border: 1px solid rgba(245,158,11,0.3); color: var(--gold);
+      border-radius: 20px; background: rgba(167,139,250,0.15);
+      border: 1px solid rgba(167,139,250,0.3); color: var(--purple);
     }
     .nav-right { display: flex; align-items: center; gap: 0.75rem; }
     .nav-user {
       font-size: 0.82rem; color: var(--text-label);
-      background: rgba(245,158,11,0.07); border: 1px solid rgba(245,158,11,0.15);
+      background: rgba(167,139,250,0.07);
+      border: 1px solid rgba(167,139,250,0.15);
       border-radius: 20px; padding: 0.3rem 0.8rem;
     }
     .btn-nav {
@@ -72,13 +71,13 @@
       border-radius: 8px; padding: 0.4rem 0.9rem; cursor: pointer;
       text-decoration: none; border: none; transition: all 0.2s;
     }
-    .btn-gold { background: linear-gradient(135deg, #d97706, #f59e0b); color: #fff; }
-    .btn-gold:hover { opacity: 0.85; transform: translateY(-1px); }
+    .btn-purple { background: linear-gradient(135deg, #7c3aed, #a78bfa); color: #fff; }
+    .btn-purple:hover { opacity: 0.85; transform: translateY(-1px); }
     .btn-outline { background: transparent; color: var(--text-label); border: 1px solid rgba(255,255,255,0.1); }
     .btn-outline:hover { border-color: var(--danger); color: var(--danger); }
 
     /* Page */
-    .page { position: relative; z-index: 1; padding: 2rem; max-width: 1200px; margin: 0 auto; }
+    .page { position: relative; z-index: 1; padding: 2rem; max-width: 1100px; margin: 0 auto; }
     .page-header { margin-bottom: 1.75rem; }
     .page-header h1 {
       font-family: 'Syne', sans-serif; font-weight: 800;
@@ -87,26 +86,25 @@
     .page-header p { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem; }
 
     /* Stats */
-    .stats-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1rem; margin-bottom: 1.75rem; }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.75rem; }
     .stat-card {
-      background: var(--bg-card); border: 1px solid rgba(245,158,11,0.1);
-      border-radius: 14px; padding: 1rem 1.1rem;
+      background: var(--bg-card);
+      border: 1px solid rgba(167,139,250,0.1);
+      border-radius: 14px; padding: 1.1rem 1.25rem;
       transition: border-color 0.2s, transform 0.2s;
     }
-    .stat-card:hover { border-color: rgba(245,158,11,0.3); transform: translateY(-2px); }
-    .stat-label { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 0.5rem; }
-    .stat-value { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.8rem; color: #fff; line-height: 1; }
-    .stat-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 0.35rem; }
-    .dot-gold    { background: var(--gold);    box-shadow: 0 0 8px rgba(245,158,11,0.6); }
+    .stat-card:hover { border-color: rgba(167,139,250,0.3); transform: translateY(-2px); }
+    .stat-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 0.5rem; }
+    .stat-value { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 2rem; color: #fff; line-height: 1; }
+    .stat-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 0.4rem; }
+    .dot-purple  { background: var(--purple);  box-shadow: 0 0 8px rgba(167,139,250,0.6); }
     .dot-danger  { background: var(--danger);  box-shadow: 0 0 8px rgba(239,68,68,0.6); }
     .dot-warning { background: var(--warning); box-shadow: 0 0 8px rgba(245,158,11,0.6); }
     .dot-success { background: var(--success); box-shadow: 0 0 8px rgba(34,197,94,0.6); }
-    .dot-cyan    { background: var(--cyan);    box-shadow: 0 0 8px rgba(56,189,248,0.6); }
-    .dot-purple  { background: var(--purple);  box-shadow: 0 0 8px rgba(167,139,250,0.6); }
 
     /* Filter */
     .filter-card {
-      background: var(--bg-card); border: 1px solid rgba(245,158,11,0.1);
+      background: var(--bg-card); border: 1px solid rgba(167,139,250,0.1);
       border-radius: 14px; padding: 1rem 1.25rem; margin-bottom: 1.25rem;
       display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;
     }
@@ -118,10 +116,10 @@
     }
     .filter-card input { flex: 1; min-width: 180px; }
     .filter-card input::placeholder { color: var(--text-muted); }
-    .filter-card input:focus, .filter-card select:focus { border-color: var(--gold); }
+    .filter-card input:focus, .filter-card select:focus { border-color: var(--purple); }
     .filter-card select option { background: #1a2540; }
     .btn-apply {
-      background: linear-gradient(135deg, #d97706, #f59e0b); color: #fff;
+      background: linear-gradient(135deg, #7c3aed, #a78bfa); color: #fff;
       border: none; border-radius: 8px; padding: 0.5rem 1.1rem;
       font-family: 'Syne', sans-serif; font-weight: 600; font-size: 0.82rem;
       cursor: pointer; transition: opacity 0.2s, transform 0.15s;
@@ -130,7 +128,7 @@
 
     /* Table */
     .table-card {
-      background: var(--bg-card); border: 1px solid rgba(245,158,11,0.1);
+      background: var(--bg-card); border: 1px solid rgba(167,139,250,0.1);
       border-radius: 14px; overflow: hidden;
     }
     .table-header {
@@ -140,39 +138,36 @@
     .table-header h2 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; color: #fff; }
     table { width: 100%; border-collapse: collapse; }
     thead th {
-      padding: 0.75rem 1.25rem; font-size: 0.72rem; font-weight: 600;
+      padding: 0.75rem 1.5rem; font-size: 0.72rem; font-weight: 600;
       color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px;
       border-bottom: 1px solid rgba(255,255,255,0.05); text-align: left;
     }
     tbody tr { border-bottom: 1px solid rgba(255,255,255,0.04); transition: background 0.15s; }
     tbody tr:last-child { border-bottom: none; }
-    tbody tr:hover { background: rgba(245,158,11,0.03); }
-    tbody td { padding: 0.85rem 1.25rem; font-size: 0.85rem; color: var(--text-label); }
+    tbody tr:hover { background: rgba(167,139,250,0.04); }
+    tbody td { padding: 0.9rem 1.5rem; font-size: 0.87rem; color: var(--text-label); }
     tbody td:first-child { color: var(--text); font-weight: 500; }
 
-    .badge { display: inline-block; padding: 0.22rem 0.6rem; border-radius: 20px; font-size: 0.7rem; font-weight: 600; }
+    .badge { display: inline-block; padding: 0.25rem 0.65rem; border-radius: 20px; font-size: 0.72rem; font-weight: 600; }
     .badge-danger  { background: rgba(239,68,68,0.15);  color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
     .badge-warning { background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); }
     .badge-success { background: rgba(34,197,94,0.15);  color: #4ade80; border: 1px solid rgba(34,197,94,0.3); }
     .badge-info    { background: rgba(56,189,248,0.15); color: #7dd3fc; border: 1px solid rgba(56,189,248,0.3); }
     .badge-muted   { background: rgba(100,116,139,0.15);color: #94a3b8; border: 1px solid rgba(100,116,139,0.3); }
 
-    .btn-edit {
-      font-size: 0.75rem; font-family: 'Syne', sans-serif; font-weight: 600;
-      padding: 0.28rem 0.75rem; border-radius: 6px;
-      border: 1px solid rgba(245,158,11,0.3);
-      color: var(--gold); background: rgba(245,158,11,0.07);
+    .btn-update {
+      font-size: 0.78rem; font-family: 'Syne', sans-serif; font-weight: 600;
+      padding: 0.3rem 0.8rem; border-radius: 6px;
+      border: 1px solid rgba(167,139,250,0.3);
+      color: var(--purple); background: rgba(167,139,250,0.07);
       text-decoration: none; transition: all 0.2s;
     }
-    .btn-edit:hover { background: rgba(245,158,11,0.15); border-color: var(--gold); }
+    .btn-update:hover { background: rgba(167,139,250,0.15); border-color: var(--purple); }
 
     .empty-state { text-align: center; padding: 3rem 1rem; color: var(--text-muted); font-size: 0.9rem; }
     .empty-state .big { font-size: 2.5rem; margin-bottom: 0.5rem; }
 
-    @media (max-width: 900px) {
-      .stats-grid { grid-template-columns: repeat(3, 1fr); }
-    }
-    @media (max-width: 600px) {
+    @media (max-width: 700px) {
       .stats-grid { grid-template-columns: repeat(2, 1fr); }
       .page { padding: 1rem; }
       .navbar { padding: 1rem; }
@@ -189,8 +184,8 @@
     Helpdesk Pro
   </a>
   <div class="nav-right">
-    <span class="admin-badge">👑 Admin</span>
-    <span class="nav-user">{{ request.user.username }}</span>
+    <span class="staff-badge">⚡ Staff</span>
+    <span class="nav-user">👤 {{ request.user.username }}</span>
     <form action="/logout/" method="POST" style="display:inline;">
       {% csrf_token %}
       <button class="btn-nav btn-outline" type="submit">Logout</button>
@@ -201,14 +196,13 @@
 <div class="page">
 
   <div class="page-header">
-    <h1>Admin Dashboard</h1>
-    <p>Full system overview — all tickets, users & staff</p>
+    <h1>Staff Dashboard</h1>
+    <p>Tickets assigned to you</p>
   </div>
 
-  <!-- 6 Stats -->
   <div class="stats-grid">
     <div class="stat-card">
-      <div class="stat-label"><span class="stat-dot dot-gold"></span>All Tickets</div>
+      <div class="stat-label"><span class="stat-dot dot-purple"></span>Assigned</div>
       <div class="stat-value">{{ stats.total }}</div>
     </div>
     <div class="stat-card">
@@ -223,17 +217,8 @@
       <div class="stat-label"><span class="stat-dot dot-success"></span>Resolved</div>
       <div class="stat-value">{{ stats.resolved }}</div>
     </div>
-    <div class="stat-card">
-      <div class="stat-label"><span class="stat-dot dot-cyan"></span>Total Users</div>
-      <div class="stat-value">{{ stats.total_users }}</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label"><span class="stat-dot dot-purple"></span>Staff Members</div>
-      <div class="stat-value">{{ stats.total_staff }}</div>
-    </div>
   </div>
 
-  <!-- Filters -->
   <div class="filter-card">
     <form method="GET" style="display:flex;gap:0.75rem;flex-wrap:wrap;width:100%;align-items:center;">
       <input type="text" name="q" value="{{ request.GET.q }}" placeholder="🔍 Search tickets...">
@@ -243,20 +228,13 @@
         <option value="In Progress" {% if request.GET.status == "In Progress" %}selected{% endif %}>In Progress</option>
         <option value="Resolved" {% if request.GET.status == "Resolved" %}selected{% endif %}>Resolved</option>
       </select>
-      <select name="priority">
-        <option value="">All Priority</option>
-        <option value="Low" {% if request.GET.priority == "Low" %}selected{% endif %}>Low</option>
-        <option value="Medium" {% if request.GET.priority == "Medium" %}selected{% endif %}>Medium</option>
-        <option value="High" {% if request.GET.priority == "High" %}selected{% endif %}>High</option>
-      </select>
       <button type="submit" class="btn-apply">Apply</button>
     </form>
   </div>
 
-  <!-- Table -->
   <div class="table-card">
     <div class="table-header">
-      <h2>👑 All Tickets</h2>
+      <h2>⚡ Assigned Tickets</h2>
       <span style="font-size:0.8rem;color:var(--text-muted);">{{ tickets|length }} ticket(s)</span>
     </div>
 
@@ -265,8 +243,7 @@
       <thead>
         <tr>
           <th>Title</th>
-          <th>User</th>
-          <th>Assigned To</th>
+          <th>Raised By</th>
           <th>Priority</th>
           <th>Status</th>
           <th>Created</th>
@@ -279,13 +256,6 @@
           <td>{{ ticket.title }}</td>
           <td style="color:var(--text-muted);">{{ ticket.user.username }}</td>
           <td>
-            {% if ticket.assigned_to %}
-              <span class="badge badge-info">{{ ticket.assigned_to.username }}</span>
-            {% else %}
-              <span class="badge badge-muted">Unassigned</span>
-            {% endif %}
-          </td>
-          <td>
             {% if ticket.priority == "High" %}<span class="badge badge-danger">High</span>
             {% elif ticket.priority == "Medium" %}<span class="badge badge-warning">Medium</span>
             {% else %}<span class="badge badge-muted">Low</span>{% endif %}
@@ -296,15 +266,15 @@
             {% else %}<span class="badge badge-success">Resolved</span>{% endif %}
           </td>
           <td>{{ ticket.created_at|date:"M d, Y" }}</td>
-          <td><a href="/update/{{ ticket.id }}/" class="btn-edit">Edit →</a></td>
+          <td><a href="/update/{{ ticket.id }}/" class="btn-update">Update →</a></td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
     {% else %}
     <div class="empty-state">
-      <div class="big">📋</div>
-      No tickets in the system yet.
+      <div class="big">📭</div>
+      No tickets assigned to you yet.
     </div>
     {% endif %}
   </div>
